@@ -1,0 +1,206 @@
+#!/bin/sh
+#menu template shell for GNU Linux System made it by luismanja - jlmanjahdz@hmail.com
+
+#alias
+alias install='sudo apt-get install'
+alias update='sudo apt-get update'
+alias dpkg='sudo dpkg -i'
+alias autoremove='sudo apt-get autoremove'
+alias fix='sudo apt-get -j install'
+
+#Globals
+sysId=`lsb_release -i`
+sysBase=$(echo `lsb_release -c`)
+systemBase=$(echo ${sysBase##*Codename:})
+systemDist=$(echo ${sysId##*Distributor ID:})
+machine=$(uname -m)
+
+#Controls
+opc=""
+n="m"
+
+#Font colours
+red='\033[01;31m'
+green='\033[01;32m'
+yellow='\033[01;33m'
+blue='\033[01;34m'
+purple='\033[01;35m'
+cyan='\033[01;36m'
+white='\033[01;37m'
+darkgrey='\033[01;90m'
+lightred='\033[01;91m'
+lightgreen='\033[01;92m'
+lightyellow='\033[01;93m'
+lightblue='\033[01;94m'
+lightpurple='\033[01;95m'
+lightcyan='\033[01;96m'
+lightwhite='\033[01;97m'
+
+#Font styles
+text='\e[0m'
+bold='\033[1m'
+underline='\033[4m'
+none='\033[00m'
+blink='\e[5m'
+
+#Functions::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+#Get the start time of an action
+setStartTime(){
+  startSec=`date +%H%M%s`
+  startMin=`date +%H%M`
+}
+
+#Get the end time of an action
+setEndTime(){
+  endSec=`date +%H%M%s`
+  endMin=`date +%H%M`
+}
+
+#Calculate the total time of an action (set times functions required)
+getTotalTime(){
+  totalMin=$(expr $endMin - $startMin)
+  totalSec=$(expr $endSec - $startSec)
+}
+
+#Find if the package is intalled
+pckgInstalled(){
+  if ! which $pckg >/dev/null; then
+          return 0
+  else
+          return 1
+  fi
+}
+
+#Get Online Status
+getOnlineStat(){
+  wget -q --tries=10 --timeout=20 --spider http://google.com
+  if [[ $? -eq 0 ]]; then
+          echo -e "${bold}${lightcyan}Status: ${lightgreen}Online${none}"
+  else
+          echo -e "${bold}${lightcyan}Status: ${lightgreen}Offline${none}"
+  fi
+}
+
+#Show console typing
+showTyping(){
+  echo -e "${bold}${lightpurple}$opc${none}"
+  echo ""
+}
+
+#Show main heading
+showHeading(){
+  echo -e "${underline}${lightred}                                                        ${none}"
+  echo -e "${bold}${lightblue}Welcome ${lightgreen}$USER!${lightblue} You using ${lightgreen}$systemDist${lightblue} from the ${lightgreen}$systemBase${lightblue} proyect."
+  getOnlineStat
+}
+
+#Show body menu
+showBody(){
+  echo ""
+  echo -e "${bold}${lightgreen}1.- Submenu 1\n2.- Submenu 2\n3;- Submenu 3\n4.- Submenu 4"
+}
+
+#Show menu
+showMenu(){
+  clear
+  n="m"
+  showHeading
+  showBody
+  showFoot
+  showTyping
+}
+
+#Show line menu
+line(){
+  echo -e "${lightcyan}[${bold}${lightpurple}$1${lightcyan}]${lightgreen} $2"
+}
+
+#Show foot menu
+showFoot(){
+  echo -e "\n${bold}${blue}m/Main u/Update ${red}q/Quit${none}\n"
+}
+
+#Show submenu
+subMenu1(){
+  clear
+  n="1"
+  echo -e  "${bold}${lightred}Submenu 1\n"
+  line "trigger" "action"
+  showFoot
+  showTyping
+}
+
+subMenu2(){
+  clear
+  n="1"
+  echo -e  "${bold}${lightred}Submenu 2\n"
+  line "trigger" "action"
+  showFoot
+  showTyping
+}
+
+subMenu3(){
+  clear
+  n="1"
+  echo -e  "${bold}${lightred}Submenu 3\n"
+  line "trigger" "action"
+  showFoot
+  showTyping
+}
+
+subMenu4(){
+  clear
+  n="1"
+  echo -e  "${bold}${lightred}Submenu 4\n"
+  line "trigger" "action"
+  showFoot
+  showTyping
+}
+
+#Menu control
+menuControl(){
+  case $n in
+    "4")
+    subMenu4
+      ;;
+    "3")
+    subMenu3
+      ;;
+    "2")
+    subMenu2
+      ;;
+    "1")
+    subMenu1
+      ;;
+    "m" )
+    showMenu
+      ;;
+  esac
+}
+
+#Start SCRIPT
+while [[ $opc != "q" ]]; do
+  menuControl
+  case $opc in
+    "p")
+    echo "pruebita"
+      ;;
+    "4")
+    subMenu4
+      ;;
+    "3")
+    subMenu3
+      ;;
+    "2")
+    subMenu2
+      ;;
+    "1")
+    subMenu1
+      ;;
+    "m" )
+    showMenu
+      ;;
+  esac
+  read opc
+done
